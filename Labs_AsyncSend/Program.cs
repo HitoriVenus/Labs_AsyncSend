@@ -31,9 +31,14 @@ public class AsynchronousClient
         try
         {
             IPHostEntry ipHostInfo = Dns.GetHostEntry(hostname);
-            
             IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+            if (hostname == "localhost") 
+            {
+                ipAddress = IPAddress.Parse("127.0.0.1");
+            } 
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, port); 
+
+
             Console.WriteLine("File to send: [C:\\descent.mp3)]");
             string fileName = Console.ReadLine();
             if (fileName.Length < 2) { fileName = "C:\\descent.mp3"; }
