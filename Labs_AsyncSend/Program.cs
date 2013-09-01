@@ -66,23 +66,21 @@ public class AsynchronousClient
             sw.Stop();
             long microseconds = sw.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
             
-            Console.WriteLine("Operation completed in: " + microseconds + " microseconds");
+            Console.WriteLine("Sent data in " + microseconds + " microseconds\n");
+            Console.WriteLine("Stick around for response? [y/N]");
+            string strInput = Console.ReadLine();
+            if (strInput == "Y" || strInput == "y")
+            {
+                Receive(client);
+                receiveDone.WaitOne();
+            }
+            else
+            {
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+                System.Environment.Exit(0);
+            }
 
-            client.Shutdown(SocketShutdown.Both);
-            client.Close();
-            /*
-            Receive(client);
-            receiveDone.WaitOne();
-
-            //long nanoseconds = sw.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L * 1000L));
-
-            
-            //Console.WriteLine("Operation completed in: " + nanoseconds + " (ns)");
-
-            Console.WriteLine("Response received : {0}", response);
-
-            */
-            //Console.ReadLine();
         }
         catch (Exception ex)
         {
@@ -99,7 +97,7 @@ public class AsynchronousClient
         {
             Socket client = (Socket)ar.AsyncState;
             client.EndConnect(ar);
-            Console.WriteLine("Socket connected to {0}",
+            Console.WriteLine("Socket connected to {0} \n",
                 client.RemoteEndPoint.ToString());
 
             connectDone.Set();
@@ -196,7 +194,7 @@ public class AsynchronousClient
             Socket client = (Socket)ar.AsyncState;
 
             int bytesSent = client.EndSend(ar);
-            Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+            Console.WriteLine("Sent {0} bytes to server. \n", bytesSent);
 
             sendDone.Set();
         }
@@ -211,10 +209,15 @@ public class AsynchronousClient
 
     public static int Main(String[] args)
     {
-        Console.WriteLine("TCP Sockets & Files...");
+        Console.WriteLine("===========================================");
+        Console.WriteLine("Labs Client");
+        Console.WriteLine("Send files over TCP with sockets.");
+        Console.WriteLine("Written in C Sharp 4.5");
+        Console.WriteLine("===========================================\n\n");
         Console.WriteLine("Server: [dev.seven-labs.com]");
         string hostname = Console.ReadLine();
-        Console.WriteLine("Using default port of 1337");
+        if (hostname.Length < 3) { hostname = "dev.seven-labs.com"; }
+        Console.WriteLine("Using default port of 1337...\n");
         StartClient(hostname);
         Console.ReadLine();
         return 0;
