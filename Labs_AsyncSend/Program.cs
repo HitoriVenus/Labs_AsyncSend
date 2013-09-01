@@ -9,7 +9,7 @@ using System.Text;
 public class StateObject
 {
     public Socket workSocket = null;
-    public const int BufferSize = 1024;
+    public const int BufferSize = 51200;
     public byte[] buffer = new byte[BufferSize];
     public StringBuilder sb = new StringBuilder();
 }
