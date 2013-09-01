@@ -211,7 +211,7 @@ public class AsynchronousClient
 
     public static int Main(String[] args)
     {
-        Console.WriteLine("Nigga Sender 2.0");
+        Console.WriteLine("TCP Sockets & Files...");
         Console.WriteLine("Server: [dev.seven-labs.com]");
         string hostname = Console.ReadLine();
         Console.WriteLine("Using default port of 1337");
